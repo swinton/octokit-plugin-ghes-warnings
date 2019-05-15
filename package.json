@@ -1,16 +1,23 @@
 {
   "name": "octokit-plugin-ghes-warnings",
   "version": "0.0.1",
-  "description": "",
+  "description": "Octokit plugin that will generate warnings when accessing GitHub REST APIs that are not available on a given GitHub Enterprise Server version",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "keywords": [],
   "author": "Steve Winton <stevewinton@gmail.com> (https://github.com/swinton)",
   "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/swinton/octokit-plugin-ghes-warnings.git"
+  },
   "dependencies": {
     "@octokit/rest": "^16.25.5",
     "@octokit/routes": "^20.2.4"
+  },
+  "devDependencies": {
+    "jest": "^24.8.0"
   }
 }
