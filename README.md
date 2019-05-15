@@ -5,11 +5,20 @@
 ## Installation
 
 ```bash
-# TODO
+npm i octokit-plugin-ghes-warnings
 ```
 
 ## Usage
 
 ```javascript
-// TODO
+// Configure Octokit to use the plugin
+const Octokit = require('@octokit/rest')
+  .plugin([
+    require('octokit-plugin-ghes-warnings'),
+  ])
 ```
+
+
+## Demo
+
+See [the included `demo.js`](demo.js) for a demonstration of the plugin.

@@ -1,6 +1,3 @@
-// Log warnings
-const log = require('console-log-level')({ level: 'warn' })
-
 // Configure Octokit to use the plugin
 const Octokit = require('@octokit/rest')
   .plugin([
@@ -9,7 +6,6 @@ const Octokit = require('@octokit/rest')
 
 const octokit = new Octokit({
   auth: `token ${process.env.GITHUB_TOKEN}`,
-  log,
   ...process.env.GHE_HOST && {baseUrl: `https://${process.env.GHE_HOST}/api/v3`}
 })
 
