@@ -1,6 +1,6 @@
 {
   "name": "octokit-plugin-ghes-warnings",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Octokit plugin that will generate warnings when accessing GitHub REST APIs that are not available on a given GitHub Enterprise Server version",
   "main": "index.js",
   "scripts": {
