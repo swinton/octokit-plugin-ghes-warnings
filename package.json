@@ -18,6 +18,7 @@
     "@octokit/routes": "^20.2.4"
   },
   "devDependencies": {
+    "console-log-level": "^1.4.1",
     "jest": "^24.8.0"
   }
 }

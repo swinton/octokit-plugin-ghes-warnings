@@ -1,3 +1,7 @@
+// Log warnings
+const log = require('console-log-level')({ level: 'warn' })
+
+// Configure Octokit to use the plugin
 const Octokit = require('@octokit/rest')
   .plugin([
     require('.'),
@@ -5,7 +9,7 @@ const Octokit = require('@octokit/rest')
 
 const octokit = new Octokit({
   auth: `token ${process.env.GITHUB_TOKEN}`,
-  log: console,
+  log,
   ...process.env.GHE_HOST && {baseUrl: `https://${process.env.GHE_HOST}/api/v3`}
 })
 
@@ -17,10 +21,9 @@ const getRestrictionsForRepo = async ({owner, repo}) => {
     })
 }
 
-
 if (require.main === module) {
   (async () => {
     const [ owner, repo ] = ['swinton', 'public']
-    await getRestrictionsForRepo({ owner, repo })
+    console.log(await getRestrictionsForRepo({ owner, repo }))
   })();
 }

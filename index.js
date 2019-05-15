@@ -3,14 +3,6 @@ const routesGHES216 = require('@octokit/routes/routes/ghe-2.16')
 const routesGHES215 = require('@octokit/routes/routes/ghe-2.15')
 const routesGHES214 = require('@octokit/routes/routes/ghe-2.14')
 
-const buildIndex = function(source, callback) {
-  const index = {}
-  Object.keys(source).forEach(namespace => {
-    Object.assign(index, source[namespace].map(callback), ...index)
-  })
-  return index
-}
-
 // Build 'index' of api.github.com routes key'd by path
 const routesDotComByPath = {}
 
@@ -31,14 +23,38 @@ Object.keys(routesDotCom).forEach(namespace => {
   })
 })
 
+// Build 'index' of ghe-2.16 routes key'd by idName
+const routesGHES216ByIdName = {}
+
+// Iterate over each ghe-2.16 namespace, e.g. 'repos`
+Object.keys(routesGHES216).forEach(namespace => {
+  routesGHES216[namespace].forEach(({ idName, method, path }) => {
+    routesGHES216ByIdName[namespace] = routesGHES216ByIdName[namespace] || {}
+    routesGHES216ByIdName[namespace][idName] = {
+      method,
+      path
+    }
+  })
+})
 
 module.exports = (octokit, options = { version: 'ghe-2.16' }) => {
-  // hook into the request lifecycle
+  // check if this request is matched by a ghe-2.16 route
   octokit.hook.before('request', async (options) => {
-    octokit.log.info(routesDotComByPath[options.url][options.method])
-  })
-}
+    try {
+      const { namespace, idName } = routesDotComByPath[options.url][options.method]
 
-if (require.main === module) {
-  console.log(routesDotComByPath['/repos/:owner/:repo/interaction-limits'])
+      // We should warn if either the namespace or idName doesn't exist on GitHub Enterprise Server 2.16
+      const warn = typeof routesGHES216ByIdName[namespace] === 'undefined' ||
+        typeof routesGHES216ByIdName[namespace][idName] === 'undefined'
+
+      if (warn) {
+        const warning = new Error(`Warning: "${options.method} ${options.url}" is not a valid API route on GitHub Enterprise Server 2.16`)
+
+        octokit.log.warn(warning)
+      }  
+    } catch (e) {
+      // Log the error
+      octokit.log.error(e)
+    }
+  })
 }
